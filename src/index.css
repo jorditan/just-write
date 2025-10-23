@@ -5,9 +5,7 @@
 }
 
 :root {
-  font-family: "Crimson Pro", serif;
-  line-height: 1.5;
-  font-weight: 400;
+  line-height: auto;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
@@ -18,13 +16,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-h1 {
+#root {
+  width: 100%;
+  margin: 0;
+}
+
+h1,
+button {
   font-family: "Crimson Pro", serif;
 }
 
-p {
+p,
+span {
   font-family: 'IBM Plex Serif', serif;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 body {
