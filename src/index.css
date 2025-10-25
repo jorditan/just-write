@@ -6,24 +6,28 @@
 
 :root {
   line-height: auto;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-
+  font-family: "Crimson Pro", serif;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+#words {
+  user-select: none;
+  --correct-letter-color: var(--text-color);
+  --correct-letter-animation: none;
+  --untyped-letter-color: var(--sub-color);
+  --untyped-letter-animation: none;
+  --incorrect-letter-color: var(--error-color);
+  --incorrect-letter-animation: none;
+  --extra-letter-color: var(--error-extra-color);
+  --extra-letter-animation: none;
+}
+
 #root {
   width: 100%;
   margin: 0;
-}
-
-h1,
-button {
-  font-family: "Crimson Pro", serif;
 }
 
 p,

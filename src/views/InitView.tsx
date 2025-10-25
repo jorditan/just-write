@@ -8,7 +8,7 @@ export const InitView = () => {
           <h1 className="text-5xl font-bold">
             Poné a prueba tu mecanografía
           </h1>
-          <p className="font-medium text-center">Al realizar la prueba, vas a descubrir cuán <span className="font-bold text-[#ffe7a4]">rápido y preciso</span> escribís en el teclado. Podrás conocer tu velocidad de mecanografía, identificar errores y mejorar tu técnica para escribir</p>
+          <p className="font-medium text-center text-base">Al realizar la prueba, vas a descubrir cuán <span className="font-bold text-neutral-content">rápido y preciso</span> escribís en el teclado. Podrás conocer tu velocidad de mecanografía, identificar errores y mejorar tu técnica para escribir</p>
           <div className="flex flex-row gap-2 items-center">
             <button className="btn btn-neutral">
               Comenzar test
