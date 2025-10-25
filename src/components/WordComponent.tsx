@@ -8,7 +8,6 @@ interface Props {
 
 export const WordComponent: FC<Props> = ({ word, id, lastCharClicked }) => {
   const [currentChar, setCurrentChar] = useState<number>(0);
-  console.log(word[currentChar])
 
   const handleCorrectKey = (lastCharClicked: string | undefined, currentChar: string) => {
     if (lastCharClicked === currentChar) {
