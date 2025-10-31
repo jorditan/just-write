@@ -15,16 +15,6 @@ export const InputText: FC<Props> = ({ text }) => {
 
   const currentExpectedChar = allChars[typedCharGlobalIndex];
 
-  // const addCarretStyle = (currentCharId: string) => {
-  //   const charDom = document.getElementById(currentCharId);
-  //   charDom?.classList.add('carret');
-  // }
-
-  // const removeCarretStyle = (currentCharId: string) => {
-  //   const charDom = document.getElementById(currentCharId);
-  //   charDom?.classList.remove("carret");
-  // };
-
   const handleStyle = (currentWordIndex: number, idString: number, key:string, expectedChar:string)  => {
     const charDom = document.getElementById(
       `word-index-${currentWordIndex}-char-${idString}`,
@@ -33,12 +23,13 @@ export const InputText: FC<Props> = ({ text }) => {
     if(charDom) {
       if(key === expectedChar){
         charDom.classList.add("correct");
+        setCorrectChars((prev) => prev+1);
       } else {
+        charDom.classList.remove("correct");
         charDom.classList.add("incorrect");
       }
     }
   }
-
 
   const removeStyles = (idString: number) => {
     const charDom = document.getElementById(
@@ -59,17 +50,7 @@ export const InputText: FC<Props> = ({ text }) => {
     }
 
     if (key === " ") {
-      const newIndexWord = currentWordIndex + 1;
-      setCurrentWordIndex(newIndexWord);
-      handleActiveWord(newIndexWord);
-
-      const startOfNewWordGlobalIndex = wordsWithSpaces
-        .slice(0, newIndexWord)
-        .reduce((acc, w) => acc + w.length, 0);
-
-      // Si nos pasamos del número de palabras, ponemos el índice al final de todos los caracteres
-      const boundedIndex = Math.min(startOfNewWordGlobalIndex, allChars.length);
-      setTypedCharGlobalIndex(boundedIndex);
+      handleSpace();
       return;
     }
 
@@ -78,10 +59,24 @@ export const InputText: FC<Props> = ({ text }) => {
       return;
     }
 
-    handleStyle(currentWordIndex, typedCharGlobalIndex, key, currentExpectedChar);
+    handleStyle(currentWordIndex, typedCharLocalIndex, key, currentExpectedChar);
     setTypedCharGlobalIndex((prev) => prev + 1);
   };
 
+  const handleCarretStyle = (typedLocalCharIndex: number) => {
+    if (typedLocalCharIndex > 0) {
+      const previousCharDom = document.getElementById(
+        `word-index-${currentWordIndex}-char-${typedLocalCharIndex - 1}`,
+      );
+      if (previousCharDom) {
+        previousCharDom.classList.remove("carret");
+      }
+    }
+    const currentCharDom = document.getElementById(`word-index-${currentWordIndex}-char-${typedLocalCharIndex}`);
+    if (currentCharDom) {
+      currentCharDom.classList.add("carret");
+    }
+  }
 
   const handleActiveWord = (index: number) => {
     if (index > 0) {
@@ -102,19 +97,35 @@ export const InputText: FC<Props> = ({ text }) => {
     setTypedCharGlobalIndex((prev) => (prev > 0 ? prev - 1 : 0));
     removeStyles(typedCharLocalIndex - 1);
     if (typedCharLocalIndex === 0) {
+      setTypedCharGlobalIndex((prev) => (prev > 0 ? prev - 1 : 0));
       setCurrentWordIndex((prev) => (prev > 0 ? prev - 1 : 0));
       handleActiveWord(currentWordIndex);
     }
   };
 
+  const handleSpace = () => {
+    const newIndexWord = currentWordIndex + 1;
+    setCurrentWordIndex(newIndexWord);
+    handleActiveWord(newIndexWord);
+
+      const startOfNewWordGlobalIndex = wordsWithSpaces
+        .slice(0, newIndexWord)
+        .reduce((acc, w) => acc + w.length, 0);
+
+      // Si nos pasamos del número de palabras, ponemos el índice al final de todos los caracteres
+      const boundedIndex = Math.min(startOfNewWordGlobalIndex, allChars.length);
+      setTypedCharGlobalIndex(boundedIndex);
+  }
+
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
+      
       const startOfCurrentWordGlobalIndex = wordsWithSpaces
         .slice(0, currentWordIndex)
         .reduce((acc, word) => acc + word.length, 0);
 
-      const typedCharLocalIndex =
-        typedCharGlobalIndex - startOfCurrentWordGlobalIndex;
+      const typedCharLocalIndex = typedCharGlobalIndex - startOfCurrentWordGlobalIndex;
+      handleCarretStyle(typedCharLocalIndex);
       handleKeyDownInternal(event, typedCharLocalIndex);
     }
 
