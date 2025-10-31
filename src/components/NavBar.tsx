@@ -1,5 +1,4 @@
-
-import { ThemeController } from './ThemeController'
+import { ThemeController } from "./ThemeController";
 export const MenuBar = () => {
   return (
     <div>
@@ -12,5 +11,5 @@ export const MenuBar = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};

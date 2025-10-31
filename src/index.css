@@ -1,7 +1,9 @@
 @import "tailwindcss";
 
 @plugin "daisyui" {
-  themes: retro --default, luxury --prefersdark;
+  themes:
+    retro --default,
+    luxury --prefersdark;
 }
 
 :root {
@@ -46,6 +48,22 @@
   animation: var(--correct-letter-animation);
 }
 
+.carret {
+  border-left: 2px solid var(--caret-color);
+  animation: blink 1.2s step-end infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    border-color: var(--caret-color);
+  }
+
+  50% {
+    border-color: transparent;
+  }
+}
+
 #root {
   width: 100%;
   margin: 0;
@@ -53,7 +71,7 @@
 
 p,
 span {
-  font-family: 'IBM Plex Serif', serif;
+  font-family: "IBM Plex Serif", serif;
   font-weight: 400;
 }
 
@@ -63,4 +81,8 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+}
+
+.active-word {
+  color: #fafafa8e;
 }
