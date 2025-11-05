@@ -5,11 +5,15 @@ interface Props {
 }
 
 export const InputText: FC<Props> = ({ text }) => {
+  
+  const wordsWithSpaces = text.split(" ").map((word, index, arr) => {
+    return index < arr.length - 1 ? word + " " : word
+  });  
+  
   const words = text.split(" ");
-  const [correctChars, setCorrectChars] = useState<number>(0);
+  const allChars = wordsWithSpaces.flatMap((word) => word.split(""));  
 
-  const wordsWithSpaces = text.split(" ").map((word) => word + " ");
-  const allChars = wordsWithSpaces.flatMap((word) => word.split(""));
+  const [correctChars, setCorrectChars] = useState<number>(0);
   const [currentWordIndex, setCurrentWordIndex] = useState<number>(0);
   const [typedCharGlobalIndex, setTypedCharGlobalIndex] = useState<number>(0);
 
@@ -37,6 +41,7 @@ export const InputText: FC<Props> = ({ text }) => {
     );
     charDom?.classList.remove("correct");
     charDom?.classList.remove("incorrect");
+    charDom?.classList.remove("carret");
   };
 
   const handleKeyDownInternal = (
@@ -63,21 +68,6 @@ export const InputText: FC<Props> = ({ text }) => {
     setTypedCharGlobalIndex((prev) => prev + 1);
   };
 
-  const handleCarretStyle = (typedLocalCharIndex: number) => {
-    if (typedLocalCharIndex > 0) {
-      const previousCharDom = document.getElementById(
-        `word-index-${currentWordIndex}-char-${typedLocalCharIndex - 1}`,
-      );
-      if (previousCharDom) {
-        previousCharDom.classList.remove("carret");
-      }
-    }
-    const currentCharDom = document.getElementById(`word-index-${currentWordIndex}-char-${typedLocalCharIndex}`);
-    if (currentCharDom) {
-      currentCharDom.classList.add("carret");
-    }
-  }
-
   const handleActiveWord = (index: number) => {
     if (index > 0) {
       const previousWordDom = document.getElementById(
@@ -91,6 +81,18 @@ export const InputText: FC<Props> = ({ text }) => {
     if (activeWordDom) {
       activeWordDom.classList.add("active-word");
     }
+  };
+
+  const handleActiveChar = (wordIndex: number, localCharIndex: number) => {
+    if (localCharIndex > 0) {
+      const prevCharDom = document.getElementById(
+        `word-index-${wordIndex}-char-${localCharIndex - 1}`,);
+      prevCharDom?.classList.remove("carret");
+    }
+    const currentChat = document.getElementById(
+        `word-index-${wordIndex}-char-${localCharIndex}`,
+    );
+    currentChat?.classList.add("carret");
   };
 
   const handleBackspace = (typedCharLocalIndex: number) => {
@@ -108,7 +110,7 @@ export const InputText: FC<Props> = ({ text }) => {
     setCurrentWordIndex(newIndexWord);
     handleActiveWord(newIndexWord);
 
-      const startOfNewWordGlobalIndex = wordsWithSpaces
+    const startOfNewWordGlobalIndex = wordsWithSpaces
         .slice(0, newIndexWord)
         .reduce((acc, w) => acc + w.length, 0);
 
@@ -125,7 +127,7 @@ export const InputText: FC<Props> = ({ text }) => {
         .reduce((acc, word) => acc + word.length, 0);
 
       const typedCharLocalIndex = typedCharGlobalIndex - startOfCurrentWordGlobalIndex;
-      handleCarretStyle(typedCharLocalIndex);
+      handleActiveChar(currentWordIndex, typedCharLocalIndex)
       handleKeyDownInternal(event, typedCharLocalIndex);
     }
 
@@ -154,9 +156,10 @@ export const InputText: FC<Props> = ({ text }) => {
           >
             {word.split("").map((char, charIndex) => (
               <span
-                key={charIndex}
+                key={typedCharGlobalIndex}
                 className={`inline-block animate-pulse
-                  `}
+                  ${charIndex === typedCharGlobalIndex ? "carret" : ""}
+                `}
                 id={`word-index-${index}-char-${charIndex}`}
               >
                 {char}
