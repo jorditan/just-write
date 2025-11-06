@@ -48,10 +48,6 @@
   animation: var(--correct-letter-animation);
 }
 
-.carret {
-  border-left: 2px solid var(--caret-color);
-  animation: blink 1.2s step-end infinite;
-}
 
 @keyframes blink {
   0%,

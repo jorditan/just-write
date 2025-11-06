@@ -41,7 +41,6 @@ export const InputText: FC<Props> = ({ text }) => {
     );
     charDom?.classList.remove("correct");
     charDom?.classList.remove("incorrect");
-    charDom?.classList.remove("carret");
   };
 
   const handleKeyDownInternal = (
@@ -99,7 +98,6 @@ export const InputText: FC<Props> = ({ text }) => {
     setTypedCharGlobalIndex((prev) => (prev > 0 ? prev - 1 : 0));
     removeStyles(typedCharLocalIndex - 1);
     if (typedCharLocalIndex === 0) {
-      setTypedCharGlobalIndex((prev) => (prev > 0 ? prev - 1 : 0));
       setCurrentWordIndex((prev) => (prev > 0 ? prev - 1 : 0));
       handleActiveWord(currentWordIndex);
     }
@@ -114,7 +112,6 @@ export const InputText: FC<Props> = ({ text }) => {
         .slice(0, newIndexWord)
         .reduce((acc, w) => acc + w.length, 0);
 
-      // Si nos pasamos del número de palabras, ponemos el índice al final de todos los caracteres
       const boundedIndex = Math.min(startOfNewWordGlobalIndex, allChars.length);
       setTypedCharGlobalIndex(boundedIndex);
   }
@@ -156,10 +153,8 @@ export const InputText: FC<Props> = ({ text }) => {
           >
             {word.split("").map((char, charIndex) => (
               <span
-                key={typedCharGlobalIndex}
-                className={`inline-block animate-pulse
-                  ${charIndex === typedCharGlobalIndex ? "carret" : ""}
-                `}
+                key={`word-index-${index}-char-${charIndex}`}
+                className={`inline-block animate-pulse`}
                 id={`word-index-${index}-char-${charIndex}`}
               >
                 {char}
