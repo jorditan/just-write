@@ -11,7 +11,12 @@ export const InputText: FC<Props> = ({ text }) => {
   });  
   
   const words = text.split(" ");
-  const allChars = wordsWithSpaces.flatMap((word) => word.split(""));  
+  const allChars = wordsWithSpaces.flatMap((word) => word.split(""));
+  
+  const totalCharCount = words.reduce(
+  (accumulator, currentValue) => accumulator + currentValue.length,
+  0
+  );
 
   const [correctChars, setCorrectChars] = useState<number>(0);
   const [currentWordIndex, setCurrentWordIndex] = useState<number>(0);
@@ -97,6 +102,7 @@ export const InputText: FC<Props> = ({ text }) => {
   const handleBackspace = (typedCharLocalIndex: number) => {
     setTypedCharGlobalIndex((prev) => (prev > 0 ? prev - 1 : 0));
     removeStyles(typedCharLocalIndex - 1);
+    setCorrectChars((prev) => (prev > 0 ? prev - 1 : 0));
     if (typedCharLocalIndex === 0) {
       setCurrentWordIndex((prev) => (prev > 0 ? prev - 1 : 0));
       handleActiveWord(currentWordIndex);
@@ -137,7 +143,7 @@ export const InputText: FC<Props> = ({ text }) => {
   return (
     <>
       <h2 className="text-2xl">
-        {correctChars} / {allChars.length}
+        {correctChars} / {totalCharCount}
       </h2>
       <div
         id="words"
