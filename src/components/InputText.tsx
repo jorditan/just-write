@@ -44,6 +44,9 @@ export const InputText: FC<Props> = ({ text }) => {
     const charDom = document.getElementById(
       `word-index-${currentWordIndex}-char-${idString}`,
     );
+    if (charDom?.classList.contains("correct")) {
+      setCorrectChars((prev) => (prev > 0 ? prev - 1 : 0));
+    }
     charDom?.classList.remove("correct");
     charDom?.classList.remove("incorrect");
   };
@@ -102,7 +105,6 @@ export const InputText: FC<Props> = ({ text }) => {
   const handleBackspace = (typedCharLocalIndex: number) => {
     setTypedCharGlobalIndex((prev) => (prev > 0 ? prev - 1 : 0));
     removeStyles(typedCharLocalIndex - 1);
-    setCorrectChars((prev) => (prev > 0 ? prev - 1 : 0));
     if (typedCharLocalIndex === 0) {
       setCurrentWordIndex((prev) => (prev > 0 ? prev - 1 : 0));
       handleActiveWord(currentWordIndex);
